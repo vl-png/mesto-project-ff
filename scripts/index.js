@@ -4,7 +4,7 @@ const cardsContainer = document.querySelector('.places__list');
 
 //Темплейт карточки
 
-function createCard(item) {
+function createCard(item, deleteCallback) {
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
@@ -23,12 +23,12 @@ function createCard(item) {
 //Функция создания карточки
 
 function addCard(item) {
-  cardsContainer.append(createCard(item))
+  cardsContainer.append(createCard(item, deleteCard))
 };
 
 //Функция удаления карточки
 
-function deleteCallback(evt) {
+function deleteCard(evt) {
   evt.target.closest('.card').remove();
 };
 
