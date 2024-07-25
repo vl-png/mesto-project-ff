@@ -1,29 +1,35 @@
 import '../styles/index.css';
-import { addCard, handleFormSubmit, addFormSubmit } from './card.js';
-import { openEditPopup, openPopup, closePopup } from './modal.js';
+import { createCard, deleteCard, likeCard } from './card.js';
+import { openPopup, closePopup } from './modal.js';
 import {initialCards} from './cards.js';
 
-export const cardsContainer = document.querySelector('.places__list'); //
-export const EditButton = document.querySelector('.profile__edit-button');
-export const AddButton = document.querySelector('.profile__add-button');
-export const popupEdit = document.querySelector('.popup_type_edit'); //
-export const popupAdd = document.querySelector('.popup_type_new-card'); //
-export const popupImg = document.querySelector('.popup_type_image'); //
-export const closeEditButton = popupEdit.querySelector('.popup__close');
-export const closeAddButton = popupAdd.querySelector('.popup__close');
-export const closeImgButton = popupImg.querySelector('.popup__close');
-export const profileName = document.querySelector('.profile__title'); // //
-export const profileJob = document.querySelector('.profile__description'); // //
-export const formEdit = popupEdit.querySelector('[name="edit-profile"]');
-export const nameInput = formEdit.querySelector('[name="name"]'); // //
-export const jobInput = formEdit.querySelector('[name="description"]'); // //
-export const formAdd = popupAdd.querySelector('[name="new-place"]'); //
-export const placeInput = formAdd.querySelector('[name="place-name"]'); //
-export const linkInput = formAdd.querySelector('[name="link"]'); //
+const cardsContainer = document.querySelector('.places__list'); 
+const editButton = document.querySelector('.profile__edit-button');
+const AddButton = document.querySelector('.profile__add-button');
+const popupEdit = document.querySelector('.popup_type_edit'); 
+const popupAdd = document.querySelector('.popup_type_new-card'); 
+const popupImg = document.querySelector('.popup_type_image'); 
+const closeEditButton = popupEdit.querySelector('.popup__close');
+const closeAddButton = popupAdd.querySelector('.popup__close');
+const closeImgButton = popupImg.querySelector('.popup__close')
+const profileName = document.querySelector('.profile__title'); 
+const profileJob = document.querySelector('.profile__description'); 
+const formEdit = popupEdit.querySelector('[name="edit-profile"]');
+const nameInput = formEdit.querySelector('[name="name"]'); 
+const jobInput = formEdit.querySelector('[name="description"]'); 
+const formAdd = popupAdd.querySelector('[name="new-place"]'); 
+const placeInput = formAdd.querySelector('[name="place-name"]'); 
+const linkInput = formAdd.querySelector('[name="link"]'); 
+const popupImage = popupImg.querySelector('.popup__image');
+const popupTitle = popupImg.querySelector('.popup__caption');
+
+function addCard(item) {
+  cardsContainer.prepend(createCard(item, deleteCard, likeCard, openImgPopup))
+};
 
 initialCards.forEach(item => addCard(item));
 
-EditButton.addEventListener('click', () => openEditPopup(popupEdit));
+editButton.addEventListener('click', () => openEditPopup(popupEdit));
 
 AddButton.addEventListener('click', () => openPopup(popupAdd));
 
@@ -33,31 +39,44 @@ closeAddButton.addEventListener('click', () => closePopup(popupAdd));
 
 closeImgButton.addEventListener('click', () => closePopup(popupImg));
 
-document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    closePopup(popupEdit);
-    closePopup(popupAdd);
-    closePopup(popupImg);
-  }
-});
-
-document.addEventListener('mousedown', (evt) => {
-  if (evt.target.classList.contains('.popup__content') || evt.target.closest('.popup__content')) {
-    return;
-  }
-  closePopup(popupEdit);
-  closePopup(popupAdd);
-  closePopup(popupImg);
-});
-
-formEdit.addEventListener('submit', handleFormSubmit);
+formEdit.addEventListener('submit', profileFormSubmit);
 
 formAdd.addEventListener('submit', addFormSubmit);
 
+function openImgPopup(element) {
+  popupImage.src = element.src;
+  popupImage.alt = element.alt;
+  popupTitle.textContent = element.alt;
+  openPopup(popupImg);
+};
 
+function openEditPopup(element) {
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileJob.textContent;
+  openPopup(element);
+};
 
+function profileFormSubmit(evt) {
+  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+                                              // Так мы можем определить свою логику отправки.
+                                              // О том, как это делать, расскажем позже.
 
+  profileName.textContent = nameInput.value;
+  profileJob.textContent = jobInput.value;
+  closePopup(popupEdit);
+};
 
+function addFormSubmit(evt) {
+  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
+                                              // Так мы можем определить свою логику отправки.
+                                              // О том, как это делать, расскажем позже.
 
-
+const add = {
+  name: placeInput.value,
+  link: linkInput.value
+};
+addCard(add);
+closePopup(popupAdd);
+formAdd.reset();
+}
 
