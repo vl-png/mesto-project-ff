@@ -5,7 +5,7 @@ import {initialCards} from './cards.js';
 
 const cardsContainer = document.querySelector('.places__list'); 
 const editButton = document.querySelector('.profile__edit-button');
-const AddButton = document.querySelector('.profile__add-button');
+const addButton = document.querySelector('.profile__add-button');
 const popupEdit = document.querySelector('.popup_type_edit'); 
 const popupAdd = document.querySelector('.popup_type_new-card'); 
 const popupImg = document.querySelector('.popup_type_image'); 
@@ -31,7 +31,7 @@ initialCards.forEach(item => addCard(item));
 
 editButton.addEventListener('click', () => openEditPopup(popupEdit));
 
-AddButton.addEventListener('click', () => openPopup(popupAdd));
+addButton.addEventListener('click', () => openPopup(popupAdd));
 
 closeEditButton.addEventListener('click', () => closePopup(popupEdit));
 
