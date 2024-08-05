@@ -2,6 +2,7 @@ import '../styles/index.css';
 import { createCard, deleteCard, likeCard } from './card.js';
 import { openPopup, closePopup } from './modal.js';
 import {initialCards} from './cards.js';
+import { validationConfig, enableValidation, clearValidation } from './form-validation.js';
 
 const cardsContainer = document.querySelector('.places__list'); 
 const editButton = document.querySelector('.profile__edit-button');
@@ -31,7 +32,7 @@ initialCards.forEach(item => addCard(item));
 
 editButton.addEventListener('click', () => openEditPopup(popupEdit));
 
-addButton.addEventListener('click', () => openPopup(popupAdd));
+addButton.addEventListener('click', () => openAddPopup(popupAdd));
 
 closeEditButton.addEventListener('click', () => closePopup(popupEdit));
 
@@ -43,6 +44,12 @@ formEdit.addEventListener('submit', profileFormSubmit);
 
 formAdd.addEventListener('submit', addFormSubmit);
 
+function openAddPopup(element) {
+  formAdd.reset()
+  clearValidation(element, validationConfig);
+  openPopup(element);
+};
+
 function openImgPopup(element) {
   popupImage.src = element.src;
   popupImage.alt = element.alt;
@@ -53,30 +60,26 @@ function openImgPopup(element) {
 function openEditPopup(element) {
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
+  clearValidation(element, validationConfig);
   openPopup(element);
 };
 
 function profileFormSubmit(evt) {
-  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-                                              // Так мы можем определить свою логику отправки.
-                                              // О том, как это делать, расскажем позже.
-
+  evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
   closePopup(popupEdit);
 };
 
 function addFormSubmit(evt) {
-  evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-                                              // Так мы можем определить свою логику отправки.
-                                              // О том, как это делать, расскажем позже.
-
-const add = {
+  evt.preventDefault();
+  const add = {
   name: placeInput.value,
   link: linkInput.value
-};
-addCard(add);
-closePopup(popupAdd);
-formAdd.reset();
+  };
+  addCard(add);
+  closePopup(popupAdd);
+  formAdd.reset();
 }
 
+enableValidation(validationConfig);
