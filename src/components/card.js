@@ -41,32 +41,28 @@ export function createCard(
     return likes.some((like) => like._id === userId);
   }
 
-  if (likes.some((like) => like._id === userId)) {
+  if (isLiked(likes)) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
-  function toggleLike(cardId) {
-    const method = isLiked(item.likes) ? deleteLikeCard : putLikeCard;
-    method(cardId)
-      .then((res) => {
-        likeCallback(likeButton, res, iconLikeCount);
-        item.likes = res.likes;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   likeButton.addEventListener("click", () => {
-    toggleLike(cardId);
+    likeCallback(cardId, isLiked(item.likes), likeButton, iconLikeCount, item);
   });
 
   return cardElement;
 }
 
-export function likeCard(likeButton, res, iconLikeCount) {
-  likeButton.classList.toggle("card__like-button_is-active");
-  iconLikeCount.textContent = res.likes.length;
+export function likeCard(cardId, isLiked, likeButton, iconLikeCount, item) {
+  const method = isLiked ? deleteLikeCard : putLikeCard;
+  method(cardId)
+    .then((res) => {
+      likeButton.classList.toggle("card__like-button_is-active");
+      iconLikeCount.textContent = res.likes.length;
+      item.likes = res.likes;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 export function deleteCard(cardId, cardElement) {

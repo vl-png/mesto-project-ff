@@ -2,7 +2,6 @@ import "../styles/index.css";
 import { createCard, deleteCard, likeCard } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
 import {
-  validationConfig,
   enableValidation,
   clearValidation,
 } from "./form-validation.js";
@@ -13,6 +12,7 @@ import {
   postCard,
   editPofileImage,
 } from "./api.js";
+import { validationConfig } from "./validationConfig.js";
 
 const cardsContainer = document.querySelector(".places__list");
 const editButton = document.querySelector(".profile__edit-button");
@@ -147,7 +147,7 @@ function addFormSubmit(evt) {
   postCard(add)
     .then((res) => {
       cardsContainer.prepend(
-        createCard(res, deleteCard, likeCard, openImgPopup)
+        createCard(res, deleteCard, likeCard, openImgPopup, res.owner._id)
       );
       closePopup(popupAdd);
     })
